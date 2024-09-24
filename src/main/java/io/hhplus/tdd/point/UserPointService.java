@@ -31,7 +31,7 @@ public class UserPointService {
         // 유저 검증
         UserPoint userPoint = this.getPointsByIdOrThrow(id);
 
-        UserPoint chargedUserPoint = userPoint.chargePointWithMaxPoint(amount);
+        UserPoint chargedUserPoint = userPoint.plusPointWithMaxPoint(amount);
 
         userPointRepository.save(id, amount);
         pointHistoryService.saveHistory(id, amount, TransactionType.CHARGE, updateMillis);

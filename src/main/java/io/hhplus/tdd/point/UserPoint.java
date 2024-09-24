@@ -18,7 +18,7 @@ public record UserPoint(
     /**
      * 현재 보유 포인트에서 충전 포인트를 더한 객체 반환
      */
-    public UserPoint chargePointWithMaxPoint(long chargePoint) {
+    public UserPoint plusPointWithMaxPoint(long chargePoint) {
 
         if (this.point + chargePoint > MAX_POINT) {
             throw new IllegalArgumentException("충전할 수 있는 최대 포인트를 초과 했습니다.");
