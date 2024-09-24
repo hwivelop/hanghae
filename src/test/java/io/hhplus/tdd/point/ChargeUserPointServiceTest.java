@@ -41,12 +41,25 @@ class ChargeUserPointServiceTest {
 
         //when
         when(userPointRepository.findById(userId)).thenReturn(Optional.of(userPointMock));
-        when(pointHistoryService.saveHistory(userId, chargePoint, TransactionType.CHARGE, timeMillis)).thenReturn(pointHistoryMock);
+        when(pointHistoryService.getHistoriesById(userId)).thenReturn(List.of(pointHistoryMock));
 
+        /**
+         * todo whee : userPoint 서비스 안의 history 서비스의 로직이 잘 저장됐는지 이렇게 확인하는게 맞나..?
+         */
         UserPoint userPoint = userPointService.chargePointById(userId, chargePoint, timeMillis);
+        List<PointHistory> histories = pointHistoryService.getHistoriesById(userId);
 
         //then
+        // 충전된 포인트는 토탈 포인트와 같다.
         assertThat(userPoint.point()).isEqualTo(totalPoint);
+        // 충전된 히스토리를 조회할 수 있다.
+        assertThat(histories).hasSize(1)
+                .extracting("userId", "amount", "type")
+                .containsExactlyInAnyOrder(
+                        tuple(userId, chargePoint, TransactionType.CHARGE)
+                );
+
+
     }
 
     @Test
