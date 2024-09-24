@@ -14,8 +14,9 @@ public class UserPointService {
     /**
      * 특정 유저의 포인트를 조회하는 기능
      */
-    public UserPoint getPointsById(long id) {
+    public UserPoint getPointsByIdOrThrow(long id) {
 
-        return userPointRepository.findById(id);
+        return userPointRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("유저 아이디가 존재하지 않습니다."));
     }
 }

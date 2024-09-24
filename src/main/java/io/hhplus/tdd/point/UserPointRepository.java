@@ -1,6 +1,8 @@
 package io.hhplus.tdd.point;
 
+import java.util.*;
+
 public interface UserPointRepository {
 
-    UserPoint findById(Long id);
+    Optional<UserPoint> findById(Long id);
 }

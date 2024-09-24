@@ -33,7 +33,7 @@ class GetUserPointServiceTest {
         //when
         when(userPointRepository.findById(userId)).thenReturn(Optional.of(userPointMock));
 
-        UserPoint userpoint = userPointService.getPointsById(userId);
+        UserPoint userpoint = userPointService.getPointsByIdOrThrow(userId);
 
         //then
         assertThat(userpoint).isNotNull();
@@ -52,7 +52,7 @@ class GetUserPointServiceTest {
         when(userPointRepository.findById(userId)).thenReturn(Optional.empty());
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            userPointService.getPointsById(userId);
+            userPointService.getPointsByIdOrThrow(userId);
         });
 
         //then
