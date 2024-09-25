@@ -30,4 +30,21 @@ public record UserPoint(
 
         return new UserPoint(this.id, this.point + chargePoint, System.currentTimeMillis());
     }
+
+    /**
+     * 현재 보유 포인트에서 사용 포인트를 차감한 객체 반환
+     */
+    public UserPoint minusPoint(long usePoint) {
+
+        if (usePoint <= 0) {
+            throw new IllegalArgumentException("차감할 포인트는 0보다 커야 합니다.");
+        }
+
+        if (this.point < usePoint) {
+            throw new IllegalArgumentException("차감할 포인트가 부족합니다.");
+        }
+
+        return new UserPoint(this.id, this.point - usePoint, System.currentTimeMillis());
+    }
+
 }

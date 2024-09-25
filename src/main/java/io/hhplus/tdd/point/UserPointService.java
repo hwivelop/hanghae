@@ -38,4 +38,20 @@ public class UserPointService {
 
         return chargedUserPoint;
     }
+
+    /**
+     * 특정 유저의 포인트를 사용하는 기능
+     */
+    public UserPoint usePointById(long id, long amount, long updateMillis) {
+
+        // 유저 검증
+        UserPoint userPoint = this.getPointsByIdOrThrow(id);
+
+        UserPoint usedUserPoint = userPoint.minusPoint(amount);
+
+        userPointRepository.save(id, usedUserPoint.point());
+        pointHistoryService.saveHistory(id, amount, TransactionType.USE, updateMillis);
+
+        return usedUserPoint;
+    }
 }
