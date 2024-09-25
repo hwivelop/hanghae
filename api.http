@@ -1,0 +1,21 @@
+### 특정 유저의 포인트를 조회하는 API
+GET http://localhost:8080/point/1
+Accept: application/json
+
+### 특정 유저의 포인트를 충전하는 API
+PATCH http://localhost:8080/point/1/charge
+Content-Type: application/json
+
+1000
+
+
+### 특정 유저의 포인트를 사용하는 API
+PATCH http://localhost:8080/point/1/use
+Content-Type: application/json
+
+500
+
+
+### 특정 유저의 포인트 사용/충전 내역을 조회하는 API
+GET http://localhost:8080/point/1/histories
+Accept: application/json
