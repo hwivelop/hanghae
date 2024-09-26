@@ -30,9 +30,9 @@ class GetUserPointServiceTest {
         final long point = 1000L;
         UserPoint userPointMock = new UserPoint(userId, point, System.currentTimeMillis());
 
-        //when
         when(userPointRepository.findById(userId)).thenReturn(userPointMock);
 
+        //when
         UserPoint userpoint = userPointService.getPointsByIdOrThrow(userId);
 
         //then
@@ -48,9 +48,9 @@ class GetUserPointServiceTest {
         //given
         final long userId = 1L;
 
-        //when
         when(userPointRepository.findById(userId)).thenThrow(new IllegalArgumentException("유저 아이디가 존재하지 않습니다."));
 
+        //when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             userPointService.getPointsByIdOrThrow(userId);
         });

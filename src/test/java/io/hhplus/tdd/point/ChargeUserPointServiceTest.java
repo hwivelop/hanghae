@@ -76,9 +76,9 @@ class ChargeUserPointServiceTest {
         final long chargePoint = 10000L;
         final long timeMillis = System.currentTimeMillis();
 
-        //when
         when(userPointRepository.findById(userId)).thenThrow(new IllegalArgumentException("유저 아이디가 존재하지 않습니다."));
 
+        //when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             userPointService.chargePointById(userId, chargePoint, timeMillis);
         });
@@ -99,9 +99,9 @@ class ChargeUserPointServiceTest {
 
         UserPoint userPointMock = new UserPoint(userId, originalPoint, timeMillis);
 
-        //when
         when(userPointRepository.findById(userId)).thenReturn(userPointMock);
 
+        //when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             userPointService.chargePointById(userId, overChargePoint, timeMillis);
         });
@@ -125,9 +125,9 @@ class ChargeUserPointServiceTest {
 
         UserPoint userPointMock = new UserPoint(userId, originalPoint, timeMillis);
 
-        //when
         when(userPointRepository.findById(userId)).thenReturn(userPointMock);
 
+        //when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             userPointService.chargePointById(userId, minusChargePoint, timeMillis);
         });
@@ -146,16 +146,16 @@ class ChargeUserPointServiceTest {
         //given
         final long userId = 1L;
         final long originalPoint = 1L;
-        final long minusChargePoint = 0L;
+        final long zeroChargePoint = 0L;
         final long timeMillis = System.currentTimeMillis();
 
         UserPoint userPointMock = new UserPoint(userId, originalPoint, timeMillis);
 
-        //when
         when(userPointRepository.findById(userId)).thenReturn(userPointMock);
 
+        //when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            userPointService.chargePointById(userId, minusChargePoint, timeMillis);
+            userPointService.chargePointById(userId, zeroChargePoint, timeMillis);
         });
 
         //then

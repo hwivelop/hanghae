@@ -41,11 +41,11 @@ class UseUserPointServiceTest {
         UserPoint resultUserPointMock = new UserPoint(userId, originalPoint, timeMillis);
         PointHistory pointHistoryMock = new PointHistory(1L, userId, usePoint, TransactionType.USE, timeMillis);
 
-        //when
         when(userPointRepository.findById(userId)).thenReturn(userPointMock);
         when(userPointRepository.save(userId, totalPoint)).thenReturn(resultUserPointMock);
         when(pointHistoryService.saveHistory(userId, usePoint, TransactionType.USE, timeMillis)).thenReturn(pointHistoryMock);
 
+        //when
         /**
          * todo whee : userPoint 서비스 안의 history 서비스의 로직이 잘 저장됐는지 이렇게 확인하는게 맞나..?
          */
@@ -70,9 +70,9 @@ class UseUserPointServiceTest {
         final long usePoint = 10000L;
         final long timeMillis = System.currentTimeMillis();
 
-        //when
         when(userPointRepository.findById(userId)).thenThrow(new IllegalArgumentException("유저 아이디가 존재하지 않습니다."));
 
+        //when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             userPointService.usePointById(userId, usePoint, timeMillis);
         });
@@ -97,9 +97,9 @@ class UseUserPointServiceTest {
 
         UserPoint userPointMock = new UserPoint(userId, originalPoint, timeMillis);
 
-        //when
         when(userPointRepository.findById(userId)).thenReturn(userPointMock);
 
+        //when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             userPointService.usePointById(userId, usePoint, timeMillis);
         });
@@ -124,9 +124,9 @@ class UseUserPointServiceTest {
 
         UserPoint userPointMock = new UserPoint(userId, originalPoint, timeMillis);
 
-        //when
         when(userPointRepository.findById(userId)).thenReturn(userPointMock);
 
+        //when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             userPointService.usePointById(userId, usePoint, timeMillis);
         });
@@ -151,9 +151,9 @@ class UseUserPointServiceTest {
 
         UserPoint userPointMock = new UserPoint(userId, originalPoint, timeMillis);
 
-        //when
         when(userPointRepository.findById(userId)).thenReturn(userPointMock);
 
+        //when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             userPointService.usePointById(userId, usePoint, timeMillis);
         });

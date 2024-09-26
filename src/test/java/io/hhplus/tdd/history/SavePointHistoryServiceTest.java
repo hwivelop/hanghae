@@ -30,9 +30,9 @@ class SavePointHistoryServiceTest {
         TransactionType type = TransactionType.CHARGE;
         PointHistory pointHistoryMock= new PointHistory(1L, userId, amount, type, timeMillis);
 
-        //when
         when(pointHistoryRepository.save(userId, amount, type, timeMillis)).thenReturn(pointHistoryMock);
 
+        //when
         PointHistory pointHistory = pointHistoryService.saveHistory(userId, amount, type, timeMillis);
 
         //then
