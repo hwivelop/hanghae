@@ -33,7 +33,7 @@ public class UserPointService {
 
         UserPoint chargedUserPoint = userPoint.plusPointWithMaxPoint(amount);
 
-        userPointRepository.save(id, amount);
+        userPointRepository.save(id, chargedUserPoint.point());
         pointHistoryService.saveHistory(id, amount, TransactionType.CHARGE, updateMillis);
 
         return chargedUserPoint;
