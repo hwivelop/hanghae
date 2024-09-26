@@ -40,7 +40,7 @@ class ChargeUserPointServiceTest {
         PointHistory pointHistoryMock = new PointHistory(1L, userId, chargePoint, TransactionType.CHARGE, timeMillis);
 
         //when
-        when(userPointRepository.findById(userId)).thenReturn(Optional.of(userPointMock));
+        when(userPointRepository.findById(userId)).thenReturn(userPointMock);
         when(pointHistoryService.getHistoriesById(userId)).thenReturn(List.of(pointHistoryMock));
 
         /**
@@ -77,7 +77,7 @@ class ChargeUserPointServiceTest {
         final long timeMillis = System.currentTimeMillis();
 
         //when
-        when(userPointRepository.findById(userId)).thenReturn(Optional.empty());
+        when(userPointRepository.findById(userId)).thenThrow(new IllegalArgumentException("유저 아이디가 존재하지 않습니다."));
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             userPointService.chargePointById(userId, chargePoint, timeMillis);
@@ -100,7 +100,7 @@ class ChargeUserPointServiceTest {
         UserPoint userPointMock = new UserPoint(userId, originalPoint, timeMillis);
 
         //when
-        when(userPointRepository.findById(userId)).thenReturn(Optional.of(userPointMock));
+        when(userPointRepository.findById(userId)).thenReturn(userPointMock);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             userPointService.chargePointById(userId, overChargePoint, timeMillis);
@@ -126,7 +126,7 @@ class ChargeUserPointServiceTest {
         UserPoint userPointMock = new UserPoint(userId, originalPoint, timeMillis);
 
         //when
-        when(userPointRepository.findById(userId)).thenReturn(Optional.of(userPointMock));
+        when(userPointRepository.findById(userId)).thenReturn(userPointMock);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             userPointService.chargePointById(userId, minusChargePoint, timeMillis);
@@ -152,7 +152,7 @@ class ChargeUserPointServiceTest {
         UserPoint userPointMock = new UserPoint(userId, originalPoint, timeMillis);
 
         //when
-        when(userPointRepository.findById(userId)).thenReturn(Optional.of(userPointMock));
+        when(userPointRepository.findById(userId)).thenReturn(userPointMock);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             userPointService.chargePointById(userId, minusChargePoint, timeMillis);

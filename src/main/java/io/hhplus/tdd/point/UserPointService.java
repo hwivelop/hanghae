@@ -19,8 +19,7 @@ public class UserPointService {
      */
     public UserPoint getPointsByIdOrThrow(long id) {
 
-        return userPointRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("유저 아이디가 존재하지 않습니다."));
+        return userPointRepository.findById(id);
     }
 
     /**
