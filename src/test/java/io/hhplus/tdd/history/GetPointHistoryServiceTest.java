@@ -28,6 +28,7 @@ class GetPointHistoryServiceTest {
         //given
         final long userId = 1L;
 
+        // 특정 유저의 2 건의 충전/사용 히스토리 생성 및 저장
         PointHistory pointHistory1 = new PointHistory(1L, userId, 1000L, TransactionType.CHARGE, System.currentTimeMillis());
         PointHistory pointHistory2 = new PointHistory(1L, userId, 500L, TransactionType.USE, System.currentTimeMillis());
 

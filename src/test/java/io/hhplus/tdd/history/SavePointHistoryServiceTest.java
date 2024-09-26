@@ -25,6 +25,7 @@ class SavePointHistoryServiceTest {
         //given
         final long userId = 1L;
 
+        // 포인트 충전/이용 내역 생성
         long timeMillis = System.currentTimeMillis();
         long amount = 1000L;
         TransactionType type = TransactionType.CHARGE;
@@ -36,6 +37,7 @@ class SavePointHistoryServiceTest {
         PointHistory pointHistory = pointHistoryService.saveHistory(userId, amount, type, timeMillis);
 
         //then
+        //저장한 내용이 생성한 타입과 금액인지 확인
         assertThat(pointHistory.type()).isEqualTo(type);
         assertThat(pointHistory.amount()).isEqualTo(amount);
     }

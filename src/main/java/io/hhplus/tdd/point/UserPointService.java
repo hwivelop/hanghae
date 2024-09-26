@@ -6,6 +6,8 @@ import lombok.*;
 import lombok.extern.slf4j.*;
 import org.springframework.stereotype.*;
 
+import java.util.concurrent.locks.*;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -14,12 +16,14 @@ public class UserPointService {
     private final UserPointRepository userPointRepository;
     private final PointHistoryService pointHistoryService;
 
+    private final ReentrantLock lock = new ReentrantLock(true);
+
     /**
      * 특정 유저의 포인트를 조회하는 기능
      */
-    public UserPoint getPointsByIdOrThrow(long id) {
+    public UserPoint getPointsById(long id) {
 
-        return userPointRepository.findById(id);
+        return userPointRepository.findByIdOrThrow(id);
     }
 
     /**
@@ -27,15 +31,21 @@ public class UserPointService {
      */
     public UserPoint chargePointById(long id, long amount, long updateMillis) {
 
-        // 유저 검증
-        UserPoint userPoint = this.getPointsByIdOrThrow(id);
+        lock.lock();
 
-        UserPoint chargedUserPoint = userPoint.plusPointWithMaxPoint(amount);
+        try {
+            // 유저 정보 조회
+            UserPoint userPoint = this.getPointsById(id);
 
-        userPointRepository.save(id, chargedUserPoint.point());
-        pointHistoryService.saveHistory(id, amount, TransactionType.CHARGE, updateMillis);
+            UserPoint chargedUserPoint = userPoint.plusPointWithMaxPoint(amount);
 
-        return chargedUserPoint;
+            userPointRepository.save(id, chargedUserPoint.point());
+            pointHistoryService.saveHistory(id, amount, TransactionType.CHARGE, updateMillis);
+
+            return chargedUserPoint;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -43,14 +53,19 @@ public class UserPointService {
      */
     public UserPoint usePointById(long id, long amount, long updateMillis) {
 
-        // 유저 검증
-        UserPoint userPoint = this.getPointsByIdOrThrow(id);
+        lock.lock();
 
-        UserPoint usedUserPoint = userPoint.minusPoint(amount);
+        try {
+            UserPoint userPoint = this.getPointsById(id);
 
-        userPointRepository.save(id, usedUserPoint.point());
-        pointHistoryService.saveHistory(id, amount, TransactionType.USE, updateMillis);
+            UserPoint usedUserPoint = userPoint.minusPoint(amount);
 
-        return usedUserPoint;
+            userPointRepository.save(id, usedUserPoint.point());
+            pointHistoryService.saveHistory(id, amount, TransactionType.USE, updateMillis);
+
+            return usedUserPoint;
+        } finally {
+            lock.unlock();
+        }
     }
 }

@@ -40,11 +40,11 @@ class ChargeUserPointServiceTest {
         PointHistory pointHistoryMock = new PointHistory(1L, userId, chargePoint, TransactionType.CHARGE, timeMillis);
 
         //when
-        when(userPointRepository.findById(userId)).thenReturn(userPointMock);
+        when(userPointRepository.findByIdOrThrow(userId)).thenReturn(userPointMock);
         when(pointHistoryService.getHistoriesById(userId)).thenReturn(List.of(pointHistoryMock));
 
         /**
-         * todo whee : userPoint 서비스 안의 history 서비스의 로직이 잘 저장됐는지 이렇게 확인하는게 맞나..?
+         * todo whee : 핵심 기능이 아닌 부가 검증 기능, 이미 검증된 부가 로직을 또 테스트 해야하는건지?
          */
         userPointService.chargePointById(userId, chargePoint, timeMillis);
         List<PointHistory> history1 = pointHistoryService.getHistoriesById(userId);
@@ -76,7 +76,7 @@ class ChargeUserPointServiceTest {
         final long chargePoint = 10000L;
         final long timeMillis = System.currentTimeMillis();
 
-        when(userPointRepository.findById(userId)).thenThrow(new IllegalArgumentException("유저 아이디가 존재하지 않습니다."));
+        when(userPointRepository.findByIdOrThrow(userId)).thenThrow(new IllegalArgumentException("유저 아이디가 존재하지 않습니다."));
 
         //when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -99,9 +99,10 @@ class ChargeUserPointServiceTest {
 
         UserPoint userPointMock = new UserPoint(userId, originalPoint, timeMillis);
 
-        when(userPointRepository.findById(userId)).thenReturn(userPointMock);
+        when(userPointRepository.findByIdOrThrow(userId)).thenReturn(userPointMock);
 
         //when
+        //최대 금액을 초과하여 충전하여 예외 발생한다.
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             userPointService.chargePointById(userId, overChargePoint, timeMillis);
         });
@@ -125,9 +126,10 @@ class ChargeUserPointServiceTest {
 
         UserPoint userPointMock = new UserPoint(userId, originalPoint, timeMillis);
 
-        when(userPointRepository.findById(userId)).thenReturn(userPointMock);
+        when(userPointRepository.findByIdOrThrow(userId)).thenReturn(userPointMock);
 
         //when
+        //마이너스 금액을 충전하여 예외 발생한다.
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             userPointService.chargePointById(userId, minusChargePoint, timeMillis);
         });
@@ -151,9 +153,10 @@ class ChargeUserPointServiceTest {
 
         UserPoint userPointMock = new UserPoint(userId, originalPoint, timeMillis);
 
-        when(userPointRepository.findById(userId)).thenReturn(userPointMock);
+        when(userPointRepository.findByIdOrThrow(userId)).thenReturn(userPointMock);
 
         //when
+        //0원을 충전해서 예외발생한다.
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             userPointService.chargePointById(userId, zeroChargePoint, timeMillis);
         });

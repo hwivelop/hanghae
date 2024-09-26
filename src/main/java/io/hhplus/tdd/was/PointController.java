@@ -27,7 +27,7 @@ public class PointController {
     ) {
         log.info("user id = {}", id);
 
-        return userPointService.getPointsByIdOrThrow(id);
+        return userPointService.getPointsById(id);
     }
 
     /**

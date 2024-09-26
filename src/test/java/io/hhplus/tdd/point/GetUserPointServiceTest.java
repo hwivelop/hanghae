@@ -5,8 +5,6 @@ import org.junit.jupiter.api.extension.*;
 import org.mockito.*;
 import org.mockito.junit.jupiter.*;
 
-import java.util.*;
-
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -30,13 +28,14 @@ class GetUserPointServiceTest {
         final long point = 1000L;
         UserPoint userPointMock = new UserPoint(userId, point, System.currentTimeMillis());
 
-        when(userPointRepository.findById(userId)).thenReturn(userPointMock);
+        when(userPointRepository.findByIdOrThrow(userId)).thenReturn(userPointMock);
 
         //when
-        UserPoint userpoint = userPointService.getPointsByIdOrThrow(userId);
+        UserPoint userpoint = userPointService.getPointsById(userId);
 
         //then
         assertThat(userpoint).isNotNull();
+        // 저장된 포인트와 조건의 포인트는 같다.
         assertThat(userpoint.point()).isEqualTo(point);
     }
 
@@ -48,11 +47,12 @@ class GetUserPointServiceTest {
         //given
         final long userId = 1L;
 
-        when(userPointRepository.findById(userId)).thenThrow(new IllegalArgumentException("유저 아이디가 존재하지 않습니다."));
+        // 임의로 유저 포인트가 없다는 상황으로 예외 발생
+        when(userPointRepository.findByIdOrThrow(userId)).thenThrow(new IllegalArgumentException("유저 아이디가 존재하지 않습니다."));
 
         //when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            userPointService.getPointsByIdOrThrow(userId);
+            userPointService.getPointsById(userId);
         });
 
         //then
