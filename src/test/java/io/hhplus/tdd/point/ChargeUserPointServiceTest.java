@@ -46,20 +46,25 @@ class ChargeUserPointServiceTest {
         /**
          * todo whee : userPoint 서비스 안의 history 서비스의 로직이 잘 저장됐는지 이렇게 확인하는게 맞나..?
          */
-        UserPoint userPoint = userPointService.chargePointById(userId, chargePoint, timeMillis);
-        List<PointHistory> histories = pointHistoryService.getHistoriesById(userId);
+        userPointService.chargePointById(userId, chargePoint, timeMillis);
+        List<PointHistory> history1 = pointHistoryService.getHistoriesById(userId);
+
+        UserPoint userPoint2 = userPointService.chargePointById(userId, chargePoint, timeMillis);
+        List<PointHistory> history2 = pointHistoryService.getHistoriesById(userId);
+
+        List<PointHistory> histories = List.of(history1.get(0), history2.get(0));
+
 
         //then
         // 충전된 포인트는 토탈 포인트와 같다.
-        assertThat(userPoint.point()).isEqualTo(totalPoint);
+        assertThat(userPoint2.point()).isEqualTo(totalPoint);
         // 충전된 히스토리를 조회할 수 있다.
-        assertThat(histories).hasSize(1)
+        assertThat(histories).hasSize(2)
                 .extracting("userId", "amount", "type")
                 .containsExactlyInAnyOrder(
+                        tuple(userId, chargePoint, TransactionType.CHARGE),
                         tuple(userId, chargePoint, TransactionType.CHARGE)
                 );
-
-
     }
 
     @Test
