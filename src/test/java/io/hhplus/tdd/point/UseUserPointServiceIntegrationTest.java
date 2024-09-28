@@ -21,13 +21,14 @@ public class UseUserPointServiceIntegrationTest {
     private PointHistoryService pointHistoryService;
 
 
-    private final long userId = 1L;
     private final long initPoint = 1000L;
 
 
     @DisplayName("특정 유저의 포인트를 사용한다.")
     @Test
     void usePoint() {
+
+        final long userId = 1L;
 
         // given
         final long usePoint = 10L;
@@ -57,6 +58,7 @@ public class UseUserPointServiceIntegrationTest {
     @Test
     void useMinusPoint() {
         //given
+        final long userId = 2L;
         final long usePoint = -2L;
         final long timeMillis = System.currentTimeMillis();
 
@@ -76,6 +78,7 @@ public class UseUserPointServiceIntegrationTest {
     void chargeZeroPoint() {
 
         //given
+        final long userId = 3L;
         final long usePoint = 10000L;
         final long timeMillis = System.currentTimeMillis();
 
